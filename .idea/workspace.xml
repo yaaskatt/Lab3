@@ -38,13 +38,17 @@
       <file leaf-file-name="CartService.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Cart/src/main/java/ru/mirea/CartService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="87" column="41" selection-start-line="87" selection-start-column="41" selection-end-line="87" selection-end-column="41" />
+            <state relative-caret-position="439">
+              <caret line="165" column="45" selection-start-line="165" selection-start-column="45" selection-end-line="165" selection-end-column="45" />
               <folding>
-                <element signature="e#1486#1487#0" expanded="true" />
-                <element signature="e#1559#1560#0" expanded="true" />
+                <element signature="method#getStuff#0;class#CartService#0" />
+                <element signature="method#getPets#0;class#CartService#0" />
+                <element signature="method#put#0;class#CartService#0" />
+                <element signature="method#delete#0;class#CartService#0" />
                 <element signature="method#get#0;class#CartService#0" />
-                <element signature="method#getStuff#1;class#CartService#0" />
+                <element signature="method#getBalance#0;class#CartService#0" />
+                <element signature="method#setBalance#0;class#CartService#0" />
+                <element signature="method#post#0;class#CartService#0" />
                 <element signature="e#7208#7209#0" expanded="true" />
                 <element signature="e#7252#7253#0" expanded="true" />
               </folding>
@@ -99,8 +103,8 @@
       <file leaf-file-name="CartController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Cart/src/main/java/ru/mirea/CartController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="27" column="23" selection-start-line="27" selection-start-column="23" selection-end-line="27" selection-end-column="23" />
+            <state relative-caret-position="176">
+              <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
               <folding>
                 <element signature="e#814#815#0" expanded="true" />
                 <element signature="e#864#865#0" expanded="true" />
@@ -536,10 +540,14 @@
         <state relative-caret-position="1037">
           <caret line="61" column="28" selection-start-line="61" selection-start-column="28" selection-end-line="61" selection-end-column="28" />
           <folding>
-            <element signature="e#1486#1487#0" expanded="true" />
-            <element signature="e#1559#1560#0" expanded="true" />
+            <element signature="method#getStuff#0;class#CartService#0" />
+            <element signature="method#getPets#0;class#CartService#0" />
+            <element signature="method#put#0;class#CartService#0" />
+            <element signature="method#delete#0;class#CartService#0" />
             <element signature="method#get#0;class#CartService#0" />
-            <element signature="method#getStuff#1;class#CartService#0" />
+            <element signature="method#getBalance#0;class#CartService#0" />
+            <element signature="method#setBalance#0;class#CartService#0" />
+            <element signature="method#post#0;class#CartService#0" />
             <element signature="e#7208#7209#0" expanded="true" />
             <element signature="e#7252#7253#0" expanded="true" />
           </folding>
@@ -653,10 +661,14 @@
         <state relative-caret-position="1921">
           <caret line="122" column="61" selection-start-line="122" selection-start-column="61" selection-end-line="122" selection-end-column="61" />
           <folding>
-            <element signature="e#1486#1487#0" expanded="true" />
-            <element signature="e#1559#1560#0" expanded="true" />
+            <element signature="method#getStuff#0;class#CartService#0" />
+            <element signature="method#getPets#0;class#CartService#0" />
+            <element signature="method#put#0;class#CartService#0" />
+            <element signature="method#delete#0;class#CartService#0" />
             <element signature="method#get#0;class#CartService#0" />
-            <element signature="method#getStuff#1;class#CartService#0" />
+            <element signature="method#getBalance#0;class#CartService#0" />
+            <element signature="method#setBalance#0;class#CartService#0" />
+            <element signature="method#post#0;class#CartService#0" />
             <element signature="e#7208#7209#0" expanded="true" />
             <element signature="e#7252#7253#0" expanded="true" />
           </folding>
@@ -852,8 +864,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Cart/src/main/java/ru/mirea/CartController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="27" column="23" selection-start-line="27" selection-start-column="23" selection-end-line="27" selection-end-column="23" />
+        <state relative-caret-position="176">
+          <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
           <folding>
             <element signature="e#814#815#0" expanded="true" />
             <element signature="e#864#865#0" expanded="true" />
@@ -865,13 +877,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Cart/src/main/java/ru/mirea/CartService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="87" column="41" selection-start-line="87" selection-start-column="41" selection-end-line="87" selection-end-column="41" />
+        <state relative-caret-position="439">
+          <caret line="165" column="45" selection-start-line="165" selection-start-column="45" selection-end-line="165" selection-end-column="45" />
           <folding>
-            <element signature="e#1486#1487#0" expanded="true" />
-            <element signature="e#1559#1560#0" expanded="true" />
+            <element signature="method#getStuff#0;class#CartService#0" />
+            <element signature="method#getPets#0;class#CartService#0" />
+            <element signature="method#put#0;class#CartService#0" />
+            <element signature="method#delete#0;class#CartService#0" />
             <element signature="method#get#0;class#CartService#0" />
-            <element signature="method#getStuff#1;class#CartService#0" />
+            <element signature="method#getBalance#0;class#CartService#0" />
+            <element signature="method#setBalance#0;class#CartService#0" />
+            <element signature="method#post#0;class#CartService#0" />
             <element signature="e#7208#7209#0" expanded="true" />
             <element signature="e#7252#7253#0" expanded="true" />
           </folding>

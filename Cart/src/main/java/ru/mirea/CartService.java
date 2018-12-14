@@ -54,38 +54,35 @@ public class CartService {
         return get("SELECT * FROM cart WHERE userId = " + userId);
     }
 
-    public List getStuff(int userId) {
-        boolean f = false;
+    public List<HashMap<String, String>> getStuff(int userId) {
         List<HashMap<String, String>> stuff = getStuff();
         List<HashMap<String, String>> cart = get("SELECT * FROM cart WHERE cart.userId = " + userId);
+        List<HashMap<String, String>> result = new ArrayList<>();
 
         for (int i=0; i<cart.size(); i++) {
             for (int j=0; j<stuff.size(); j++) {
                 Map cartMap = cart.get(i);
                 Map stuffMap = stuff.get(j);
-                if (cartMap.get("ITEMID").equals(stuffMap.get("ID"))) {
-                    f = true;
+                if (cartMap.get("ITEMID").toString().equals(stuffMap.get("ID").toString())) {
+                    result.add(cart.get(i));
                     break;
                 }
             }
-            if (!f) cart.remove(i);
-            f = false;
+
         }
-        return cart;
+        return result;
     }
 
     public List<HashMap<String, String>> getPets(int userId) {
-        boolean f = false;
+
         List<HashMap<String, String>> pets = getPets();
         List<HashMap<String, String>> cart = get("SELECT * FROM cart WHERE cart.userId = " + userId);
         List<HashMap<String, String>> result = new ArrayList<>();
-        List<String> a = new ArrayList<>();
 
         for (int i=0; i<cart.size(); i++) {
             for (int j=0; j<pets.size(); j++) {
                 Map cartMap = cart.get(i);
                 Map petsMap = pets.get(j);
-                a.add(cartMap.get("ITEMID").toString());
                 if (cartMap.get("ITEMID").toString().equals(petsMap.get("ID").toString())) {
                     result.add(cart.get(i));
                     break;
@@ -164,6 +161,13 @@ public class CartService {
         return responseEntity.getBody();
     }
 
+    private List<HashMap<String, String>> getStuff() {
+        ResponseEntity<List<HashMap<String, String>>> responseEntity = restTemplate.exchange
+                ("http://localhost:8083/stuff", HttpMethod.GET,
+                        null, new ParameterizedTypeReference<List<HashMap<String, String>>>(){});
+        return responseEntity.getBody();
+    }
+
     public List<HashMap<String, String>> getBalance(int userId) {
 
         ResponseEntity<List<HashMap<String, String>>> responseEntity = restTemplate.exchange
@@ -180,9 +184,7 @@ public class CartService {
 
     }
 
-    private List<HashMap<String, String>> getStuff() {
-        return restTemplate.getForObject("http://localhost:8083/stuff", List.class);
-    }
+
 
     public void post(int userId) {
         int sum = 0;
