@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -23,7 +25,7 @@ public class CartController {
 
     @RequestMapping(value = "cart/pets/{userId}", method = GET)
     @ResponseBody
-    public List getPets(@PathVariable int userId) {
+    public List<String> getPets(@PathVariable int userId) {
         return cartService.getPets(userId);
     }
 
@@ -49,6 +51,12 @@ public class CartController {
     @ResponseBody
     public void post(@PathVariable int userId) {
         cartService.post(userId);
+    }
+
+    @RequestMapping(value = "cart/balance", method = GET)
+    @ResponseBody
+    public List<HashMap<String, String>> getBalance() {
+        return cartService.getBalance(1);
     }
 
     @Autowired

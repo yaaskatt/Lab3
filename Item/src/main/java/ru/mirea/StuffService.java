@@ -1,4 +1,4 @@
-package ru.mirea.services;
+package ru.mirea;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
@@ -36,9 +38,9 @@ public class StuffService {
         } catch (Exception e) {e.printStackTrace();};
     }
 
-    public List stuff() {
+    public List<HashMap<String, String>> stuff() {
         String q = "SELECT * FROM stuff";
-        List result = null;
+        List<HashMap<String, String>> result = new ArrayList<>();
         try {
             rs = stmt.executeQuery(q);
         } catch (Exception e) {e.printStackTrace();};

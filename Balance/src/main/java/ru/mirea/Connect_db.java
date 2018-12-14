@@ -18,7 +18,7 @@ public class Connect_db {
     private static Connection getNewConnection() {
         String user = "root";
         String password = "root";
-        String url = "jdbc:h2:mem:~/DB";
+        String url = "jdbc:h2:mem:~/Balance_DB";
         try {
             Class.forName("org.h2.Driver").newInstance();
             con=DriverManager.getConnection(url, user, password);

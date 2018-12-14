@@ -8,11 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class Convertion {
 
-    public static List resultSetToArrayList(ResultSet rs) throws SQLException {
+    public static List<HashMap<String, String>> resultSetToArrayList(ResultSet rs) throws SQLException {
         List list = new ArrayList();
         ResultSetMetaData md = rs.getMetaData();
         int columns = md.getColumnCount();

@@ -1,4 +1,4 @@
-package ru.mirea.services;
+package ru.mirea;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,10 @@ import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class PetService {
@@ -36,9 +39,9 @@ public class PetService {
         } catch (Exception e) {e.printStackTrace();};
     }
 
-    public List pets() {
+    public List<HashMap<String, String>> pets() {
         String q = "SELECT * FROM pets";
-        List result = null;
+        List<HashMap<String, String>> result = new ArrayList<>();
         try {
             rs = stmt.executeQuery(q);
         } catch (Exception e) {e.printStackTrace();};
@@ -47,6 +50,7 @@ public class PetService {
         } catch (Exception e) {e.printStackTrace();};
         return result;
     }
+
 
     @Autowired
     public void setConnect_db (Connect_db connect_db) {

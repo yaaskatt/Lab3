@@ -8,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-
 @Component
 public class Connect_db {
     private static Connection con = null;
@@ -21,7 +20,7 @@ public class Connect_db {
     private static Connection getNewConnection() {
         String user = "root";
         String password = "root";
-        String url = "jdbc:h2:mem:~/DB";
+        String url = "jdbc:h2:mem:~/Item_DB";
         try {
             Class.forName("org.h2.Driver").newInstance();
             con=DriverManager.getConnection(url, user, password);

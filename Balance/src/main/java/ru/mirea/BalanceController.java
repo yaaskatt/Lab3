@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -18,7 +19,7 @@ public class BalanceController {
 
     @RequestMapping(value = "balance/{id}", method = GET)
     @ResponseBody
-    public List balance(@PathVariable int id) {
+    public List<HashMap<String, String>> balance(@PathVariable int id) {
         return balanceService.balance(id);
     }
 

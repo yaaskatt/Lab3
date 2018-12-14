@@ -1,15 +1,23 @@
 package ru.mirea;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import javax.validation.constraints.Null;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class CartService {
@@ -19,6 +27,7 @@ public class CartService {
     private static Connection con = null;
     private static Statement stmt;
     private static ResultSet rs;
+    private static RestTemplate restTemplate;
 
     @PostConstruct
     public void init() {
@@ -37,27 +46,76 @@ public class CartService {
                     "(4, 6), (4, 1)," +
                     "(5, 2), (5, 3), (5, 5)");
         } catch (Exception e) {e.printStackTrace();}
+        restTemplate = new RestTemplate();
 
         }
 
-    public List cart(int userId) {
-        String q = "SELECT * FROM cart WHERE userId = " + userId;
-        return get(q);
+    public List<HashMap<String, String>> cart(int userId) {
+        return get("SELECT * FROM cart WHERE userId = " + userId);
     }
 
     public List getStuff(int userId) {
-        String q = "SELECT * FROM cart INNER JOIN stuff ON cart.itemId = stuff.id WHERE cart.userId = " + userId;
-        return get(q);
+        boolean f = false;
+        List<HashMap<String, String>> stuff = getStuff();
+        List<HashMap<String, String>> cart = get("SELECT * FROM cart WHERE cart.userId = " + userId);
+
+        for (int i=0; i<cart.size(); i++) {
+            for (int j=0; j<stuff.size(); j++) {
+                Map cartMap = cart.get(i);
+                Map stuffMap = stuff.get(j);
+                if (cartMap.get("ITEMID").equals(stuffMap.get("ID"))) {
+                    f = true;
+                    break;
+                }
+            }
+            if (!f) cart.remove(i);
+            f = false;
+        }
+        return cart;
     }
 
-    public List getPets(int userId) {
-        String q = "SELECT * FROM cart INNER JOIN pets ON " +
-                "cart.itemId = pets.id WHERE cart.userId = " + userId;
-        return get(q);
+    public List<String> getPets(int userId) {
+        boolean f = false;
+        List<HashMap<String, String>> pets = getPets();
+        List<HashMap<String, String>> cart = get("SELECT * FROM cart WHERE cart.userId = " + userId);
+        List<HashMap<String, String>> result = new ArrayList<>();
+        List<String> a = new ArrayList<>();
+
+        for (int i=0; i<cart.size(); i++) {
+            for (int j=0; j<pets.size(); j++) {
+                Map cartMap = cart.get(i);
+                Map petsMap = pets.get(j);
+                a.add(petsMap.get("ID").toString());
+                if (cartMap.get("ITEMID").equals(petsMap.get("ID"))) {
+                    result.add(cart.get(i));
+                    break;
+                }
+            }
+
+        }
+        return a;
     }
 
     public void put(int userId, int itemId) {
-        boolean n = true;
+        boolean f = false;
+        List<HashMap<String, String>> items = getPets();
+        List<HashMap<String, String>> stuff = getStuff();
+        items.addAll(stuff);
+
+        for (int i=0; i<items.size(); i++) {
+            Map map = new HashMap();
+            if (map.get("ID").equals(itemId)) {
+                f = true;
+                break;
+            }
+        }
+        if (!f) throw new NullPointerException(("No item found"));
+        String q = "INSERT INTO cart(userId, itemId) VALUES(" + userId + "," + itemId + ")";
+        try {
+            stmt.executeUpdate(q);
+        } catch (Exception e) {};
+
+        /*
         String check = "SELECT * FROM pets WHERE id = " + itemId + " UNION SELECT * FROM stuff WHERE id = " + itemId;
         try {
             rs = stmt.executeQuery(check);
@@ -72,6 +130,7 @@ public class CartService {
         try {
             stmt.executeUpdate(q);
         } catch (Exception e) {};
+        */
 
     }
 
@@ -80,12 +139,12 @@ public class CartService {
         try {
             stmt.executeUpdate(q);
         } catch (Exception e) {
+            System.out.println("No record found");
         };
     }
 
-    private List get(String q) {
-        List result = null;
-        rs = null;
+    private List<HashMap<String, String>> get(String q) {
+        List<HashMap<String, String>> result = new ArrayList<>();
         try {
             rs = stmt.executeQuery(q);
         } catch (Exception e) {
@@ -98,45 +157,57 @@ public class CartService {
         return result;
     }
 
+    private List<HashMap<String, String>> getPets() {
+        ResponseEntity<List<HashMap<String, String>>> responseEntity = restTemplate.exchange
+                ("http://localhost:8083/pets", HttpMethod.GET,
+                        null, new ParameterizedTypeReference<List<HashMap<String, String>>>(){});
+        return responseEntity.getBody();
+    }
+
+    public List<HashMap<String, String>> getBalance(int userId) {
+
+        ResponseEntity<List<HashMap<String, String>>> responseEntity = restTemplate.exchange
+                ("http://localhost:8081/balance/{id}", HttpMethod.GET,
+                        null, new ParameterizedTypeReference<List<HashMap<String, String>>>(){}, userId);
+        return responseEntity.getBody();
+
+    }
+
+    private void setBalance(int userId, int bal) {
+        ResponseEntity<List<HashMap<String, String>>> responseEntity = restTemplate.exchange
+                ("http://localhost:8081/balance/{id}={balance}", HttpMethod.PUT, null,
+                        new ParameterizedTypeReference<List<HashMap<String, String>>>(){}, userId, bal);
+
+    }
+
+    private List<HashMap<String, String>> getStuff() {
+        return restTemplate.getForObject("http://localhost:8083/stuff", List.class);
+    }
+
     public void post(int userId) {
-        int petSum = 0;
-        int stuffSum = 0;
-        int totalPrice = 0;
+        int sum = 0;
         int bal = 0;
-        String q = "SELECT SUM(pets.price) FROM pets INNER JOIN cart ON cart.itemId = pets.id WHERE cart.userId = " + userId;
-        try {
-            rs = stmt.executeQuery(q);
-            rs.next();
-            petSum = rs.getInt(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        };
-        q = "SELECT SUM(stuff.price) FROM stuff INNER JOIN cart ON cart.itemId = stuff.id WHERE cart.userId = " + userId;
-        try {
-            rs = stmt.executeQuery(q);
-            rs.next();
-            stuffSum = rs.getInt(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        };
-        totalPrice = petSum + stuffSum;
-        q = "SELECT balance FROM balance WHERE userId = " + userId;
-        try {
-            rs = stmt.executeQuery(q);
-            rs.next();
-            bal = rs.getInt(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        };
-        if (bal >= totalPrice) {
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put("http://localhost:8081/balance/{id}={balance}", null , userId, bal-totalPrice);
+        List<HashMap<String, String>> items = getPets();
+        items.addAll(getStuff());
+        List<HashMap<String, String>> cart = cart(userId);
+        HashMap<String, String> balance = getBalance(userId).get(0);
+        bal = Integer.parseInt(balance.get("BALANCE"));
+
+        for (int i=0; i<items.size(); i++) {
+            Map cartMap = new HashMap<>();
+            for (int j=0; j<items.size(); j++) {
+                Map itemsMap = new HashMap<>();
+                if (cartMap.get("ITEMID").equals(itemsMap.get("ID"))) {
+                    sum += (int)cartMap.get("PRICE");
+                }
+            }
         }
-        else throw new UnsupportedOperationException("Not enough balance");
-        q = "DELETE FROM cart WHERE userId = " + userId;
+        if (bal < sum) throw new UnsupportedOperationException("Not enough balance");
         try {
-            stmt.executeUpdate(q);
+            stmt.executeUpdate("DELETE FROM cart WHERE userId = " + userId);
         } catch (Exception e) {};
+        setBalance(userId, bal-sum);
+
     }
 
 

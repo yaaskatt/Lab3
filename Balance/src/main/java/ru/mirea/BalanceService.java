@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
@@ -32,9 +34,9 @@ public class BalanceService {
         } catch (Exception e) {e.printStackTrace();};
     }
 
-    public List balance(int id) {
+    public List<HashMap<String, String>> balance(int id) {
         String q = "SELECT * FROM balance WHERE userId = " + id;
-        List result = null;
+        List<HashMap<String, String>> result = new ArrayList<>();
         rs = null;
         try {
             rs = stmt.executeQuery(q);
