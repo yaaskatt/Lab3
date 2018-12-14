@@ -55,13 +55,14 @@ public class CartService {
     }
 
     public List<HashMap<String, String>> getStuff(int userId) {
+
         List<HashMap<String, String>> stuff = getStuff();
         List<HashMap<String, String>> cart = get("SELECT * FROM cart WHERE cart.userId = " + userId);
         List<HashMap<String, String>> result = new ArrayList<>();
 
         for (int i=0; i<cart.size(); i++) {
+            Map cartMap = cart.get(i);
             for (int j=0; j<stuff.size(); j++) {
-                Map cartMap = cart.get(i);
                 Map stuffMap = stuff.get(j);
                 if (cartMap.get("ITEMID").toString().equals(stuffMap.get("ID").toString())) {
                     result.add(cart.get(i));
@@ -80,8 +81,8 @@ public class CartService {
         List<HashMap<String, String>> result = new ArrayList<>();
 
         for (int i=0; i<cart.size(); i++) {
+            Map cartMap = cart.get(i);
             for (int j=0; j<pets.size(); j++) {
-                Map cartMap = cart.get(i);
                 Map petsMap = pets.get(j);
                 if (cartMap.get("ITEMID").toString().equals(petsMap.get("ID").toString())) {
                     result.add(cart.get(i));
@@ -178,29 +179,24 @@ public class CartService {
     }
 
     private void setBalance(int userId, int bal) {
-        ResponseEntity<List<HashMap<String, String>>> responseEntity = restTemplate.exchange
-                ("http://localhost:8081/balance/{id}={balance}", HttpMethod.PUT, null,
-                        new ParameterizedTypeReference<List<HashMap<String, String>>>(){}, userId, bal);
-
+        restTemplate.put("http://localhost:8081/balance/{id}={balance}", null, userId, bal);
     }
-
-
 
     public void post(int userId) {
         int sum = 0;
-        int bal = 0;
+        int bal;
         List<HashMap<String, String>> items = getPets();
         items.addAll(getStuff());
         List<HashMap<String, String>> cart = cart(userId);
         HashMap<String, String> balance = getBalance(userId).get(0);
         bal = Integer.parseInt(balance.get("BALANCE"));
 
-        for (int i=0; i<items.size(); i++) {
-            Map cartMap = new HashMap<>();
+        for (int i=0; i<cart.size(); i++) {
+            Map cartMap = cart.get(i);
             for (int j=0; j<items.size(); j++) {
-                Map itemsMap = new HashMap<>();
-                if (cartMap.get("ITEMID").equals(itemsMap.get("ID"))) {
-                    sum += (int)cartMap.get("PRICE");
+                Map itemsMap = items.get(j);
+                if (cartMap.get("ITEMID").toString().equals(itemsMap.get("ID").toString())) {
+                    sum += Integer.parseInt(itemsMap.get("PRICE").toString());
                 }
             }
         }
