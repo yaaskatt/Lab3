@@ -74,7 +74,7 @@ public class CartService {
         return cart;
     }
 
-    public List<String> getPets(int userId) {
+    public List<HashMap<String, String>> getPets(int userId) {
         boolean f = false;
         List<HashMap<String, String>> pets = getPets();
         List<HashMap<String, String>> cart = get("SELECT * FROM cart WHERE cart.userId = " + userId);
@@ -85,15 +85,15 @@ public class CartService {
             for (int j=0; j<pets.size(); j++) {
                 Map cartMap = cart.get(i);
                 Map petsMap = pets.get(j);
-                a.add(petsMap.get("ID").toString());
-                if (cartMap.get("ITEMID").equals(petsMap.get("ID"))) {
+                a.add(cartMap.get("ITEMID").toString());
+                if (cartMap.get("ITEMID").toString().equals(petsMap.get("ID").toString())) {
                     result.add(cart.get(i));
                     break;
                 }
             }
 
         }
-        return a;
+        return result;
     }
 
     public void put(int userId, int itemId) {

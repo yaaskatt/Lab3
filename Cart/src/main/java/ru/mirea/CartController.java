@@ -25,7 +25,7 @@ public class CartController {
 
     @RequestMapping(value = "cart/pets/{userId}", method = GET)
     @ResponseBody
-    public List<String> getPets(@PathVariable int userId) {
+    public List<HashMap<String, String>>getPets(@PathVariable int userId) {
         return cartService.getPets(userId);
     }
 
