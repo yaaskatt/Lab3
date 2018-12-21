@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mirea.Connect_db;
 import ru.mirea.Convertion;
+
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,9 +22,8 @@ public class StuffService {
     private static Statement stmt;
     private static ResultSet rs;
 
-    @PostConstruct
-    public void init(){
-        con = Connect_db.getConnection();
+    public void createDB() {
+        con = connect_db.getConnection();
         try {
             stmt = con.createStatement();
             stmt.executeUpdate("CREATE TABLE stuff(" +
@@ -35,7 +35,10 @@ public class StuffService {
                     "(4, 'brush', 300)," +
                     "(5, 'shampoo', 800)," +
                     "(6, 'toy', 400)");
-        } catch (Exception e) {e.printStackTrace();};
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ;
     }
 
     public List<HashMap<String, String>> stuff() {
@@ -43,15 +46,21 @@ public class StuffService {
         List<HashMap<String, String>> result = new ArrayList<>();
         try {
             rs = stmt.executeQuery(q);
-        } catch (Exception e) {e.printStackTrace();};
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ;
         try {
             result = Convertion.resultSetToArrayList(rs);
-        } catch (Exception e) {e.printStackTrace();};
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ;
         return result;
     }
 
     @Autowired
-    public void setConnect_db (Connect_db connect_db) {
+    public void setConnect_db(Connect_db connect_db) {
         this.connect_db = connect_db;
     }
 }

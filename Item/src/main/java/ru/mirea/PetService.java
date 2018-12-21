@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mirea.Connect_db;
 import ru.mirea.Convertion;
+
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -22,9 +23,8 @@ public class PetService {
     private static Statement stmt;
     private static ResultSet rs;
 
-    @PostConstruct
-    public void init() {
-        con = Connect_db.getConnection();
+    public void createDB() {
+        con = connect_db.getConnection();
         try {
             stmt = con.createStatement();
             stmt.executeUpdate("CREATE TABLE pets(" +
@@ -36,7 +36,10 @@ public class PetService {
                     "(1, 'cat', 2000)," +
                     "(2, 'dog', 3000)," +
                     "(3, 'rabbit', 5000)");
-        } catch (Exception e) {e.printStackTrace();};
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ;
     }
 
     public List<HashMap<String, String>> pets() {
@@ -44,16 +47,22 @@ public class PetService {
         List<HashMap<String, String>> result = new ArrayList<>();
         try {
             rs = stmt.executeQuery(q);
-        } catch (Exception e) {e.printStackTrace();};
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ;
         try {
             result = Convertion.resultSetToArrayList(rs);
-        } catch (Exception e) {e.printStackTrace();};
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ;
         return result;
     }
 
 
     @Autowired
-    public void setConnect_db (Connect_db connect_db) {
+    public void setConnect_db(Connect_db connect_db) {
         this.connect_db = connect_db;
     }
 

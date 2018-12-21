@@ -20,10 +20,9 @@ public class BalanceService {
     private static Statement stmt;
     private static ResultSet rs;
 
-    @PostConstruct
-    public void init() {
+    public void createDB() {
 
-        con = Connect_db.getConnection();
+        con = connect_db.getConnection();
 
         try {
             stmt = con.createStatement();
@@ -31,7 +30,10 @@ public class BalanceService {
                     "userId INT(10) PRIMARY KEY, balance INT(10)" +
                     ")");
             stmt.executeUpdate("INSERT INTO balance VALUES (1, 1000), (2, 4000), (3, 500), (4, 0), (5, 12000)");
-        } catch (Exception e) {e.printStackTrace();};
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ;
     }
 
     public List<HashMap<String, String>> balance(int id) {
@@ -43,11 +45,15 @@ public class BalanceService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new NullPointerException("User not found");
-            };
+        }
+        ;
 
         try {
             result = Convertion.resultSetToArrayList(rs);
-        } catch (Exception e) {e.printStackTrace();};
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ;
         return result;
     }
 
@@ -58,11 +64,12 @@ public class BalanceService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new NullPointerException("User not found");
-        };
+        }
+        ;
     }
 
     @Autowired
-    public void setConnect_db (Connect_db connect_db) {
+    public void setConnect_db(Connect_db connect_db) {
         this.connect_db = connect_db;
     }
 }

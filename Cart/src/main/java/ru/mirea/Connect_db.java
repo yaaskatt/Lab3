@@ -8,14 +8,15 @@ import java.sql.DriverManager;
 
 @Component
 public class Connect_db {
-    private static Connection con = null;
 
-    public static Connection getConnection() {
+    private Connection con = null;
+
+    public Connection getConnection() {
         if (con == null) con = getNewConnection();
         return con;
     }
 
-    private static Connection getNewConnection() {
+    private Connection getNewConnection() {
         String user = "root";
         String password = "root";
         String url = "jdbc:h2:mem:~/Cart_DB";

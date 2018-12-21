@@ -29,8 +29,7 @@ public class CartService {
     private static ResultSet rs;
     private static RestTemplate restTemplate;
 
-    @PostConstruct
-    public void init() {
+    public void createDB() {
         con = connect_db.getConnection();
         try {
             stmt = con.createStatement();
@@ -112,23 +111,6 @@ public class CartService {
         try {
             stmt.executeUpdate(q);
         } catch (Exception e) {};
-
-        /*
-        String check = "SELECT * FROM pets WHERE id = " + itemId + " UNION SELECT * FROM stuff WHERE id = " + itemId;
-        try {
-            rs = stmt.executeQuery(check);
-        } catch (Exception e) {
-        };
-
-        try {
-        n = rs.next();
-        } catch (Exception e) {};
-        if (n == false) throw new NullPointerException("No item found");
-        String q = "INSERT INTO cart(userId, itemId) VALUES(" + userId + "," + itemId + ")";
-        try {
-            stmt.executeUpdate(q);
-        } catch (Exception e) {};
-        */
 
     }
 
